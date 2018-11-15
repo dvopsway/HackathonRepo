@@ -1,10 +1,6 @@
 <iframe src="https://www.youtube.com/embed/UqmTmdzDvaM" class="youtube" frameborder="0" allowfullscreen></iframe>
 
-## Why Hello World?
-One must learn to crawl first before one can run. Hello World is a starting point to many great things to come.
-
-[markdown cheat sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-
+## Why Trust Platform using Blockchain?
 
 ## What is it?
 
@@ -14,11 +10,11 @@ We created a contract for hotel review which basically deployed on Blockchain an
 ~~~~
 
 ## Show me it in action!
-![Trust Platform using Blockchain](https://image.ibb.co/cKwdVw/hello_world.jpg)
+![Trust Platform using Blockchain]
 
 ## What's next?
 
-Currently we have implmented Trust Platform for hotel review we can extnd it to for any problem where we need to build trust.
+Currentlyi, we have implmented "Trust Platform using Blockchain for hotel review". We can extend it to for any problem where we need to build trust.
 
 Feel free to contact us if you any questions!
 

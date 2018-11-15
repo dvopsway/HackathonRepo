@@ -1,0 +1,29 @@
+{
+	"name": "project name",
+	"enabled": true,
+	"icon": 102,
+	"team": "The Force",
+	"team-email": "romehta@expedia.com",
+	"slack-channel": "#<team-slack-channel>",
+	"tag-line": "TBD",
+	"links": [
+		{
+			"name": "Example Link",
+			"url": "http://<link_url>"
+		}
+	],
+	"tags": [
+		"xTech Week 2018"
+	],
+	"contributors": [
+		"tdawer",
+		"ansgupta",
+		"gverma",
+		"nebajaj",
+		"agupta4",
+		"romehta",
+		"pojha",
+		"ychauhan",
+		"jsingh1"
+	]
+}

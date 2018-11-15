@@ -10,7 +10,7 @@ We created a contract for hotel review which basically deployed on Blockchain an
 ~~~~
 
 ## Show me it in action!
-![Trust Platform using Blockchain]
+![Trust Platform using Blockchain](Git url here)
 
 ## What's next?
 

@@ -4,6 +4,8 @@ App = {
   account: '0x0',
   hasVoted: false,
 
+  
+
   init: function() {
     return App.initWeb3();
   },
@@ -23,11 +25,11 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON("Election.json", function(election) {
+    $.getJSON("HotelReview.json", function(hotelreview) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.Election = TruffleContract(election);
+      App.contracts.HotelReview = TruffleContract(hotelreview);
       // Connect provider to interact with contract
-      App.contracts.Election.setProvider(App.web3Provider);
+      App.contracts.HotelReview.setProvider(App.web3Provider);
 
       App.listenForEvents();
 
@@ -37,11 +39,11 @@ App = {
 
   // Listen for events emitted from the contract
   listenForEvents: function() {
-    App.contracts.Election.deployed().then(function(instance) {
+    App.contracts.HotelReview.deployed().then(function(instance) {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.votedEvent({}, {
+      instance.reviewEvent({}, {
         fromBlock: 0,
         toBlock: 'latest'
       }).watch(function(error, event) {
@@ -53,7 +55,7 @@ App = {
   },
 
   render: function() {
-    var electionInstance;
+    var hotelInstance;
     var loader = $("#loader");
     var content = $("#content");
 
@@ -69,37 +71,46 @@ App = {
     });
 
     // Load contract data
-    App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
-      return electionInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
+    App.contracts.HotelReview.deployed().then(function(instance) {
+      hotelInstance = instance;
+      return hotelInstance.hotelsCount();
+    }).then(function(hotelsCount) {
+      var hotelResult = $("#hotelResult");
+      hotelResult.empty();
 
-      var candidatesSelect = $('#candidatesSelect');
-      candidatesSelect.empty();
+      var hotelSelect = $("#hotelSelect");
+      hotelSelect.empty();
 
-      for (var i = 1; i <= candidatesCount; i++) {
-        electionInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
+      var idToName = {1 : "The Leela", 2:"IBIS", 3:"The Lalit", 4:"Lemontree", 5:"Radisson Blu"};
+
+      for (var i = 1; i <= hotelsCount; i++) {
+        hotelInstance.hotels(i).then(function(hotel) {
+        console.log(hotel);
+         var id = hotel[0];
+          var reviewCount = hotel[1];
+          var reviewSum = hotel[2];
+
+          var rat = 0;
+          if(reviewCount != 0) {
+           rat =  (reviewSum/reviewCount)
+          }
 
           // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
+          var candidateTemplate = "<tr><th>" + id + "</th><td>" + idToName[id] + "</td><td>" + rat + "</td></tr>"
+          hotelResult.append(candidateTemplate);
+          
 
           // Render candidate ballot option
-          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-          candidatesSelect.append(candidateOption);
+          var candidateOption = "<option value='" + id + "' >" + idToName[id] + "</ option>"
+          hotelSelect.append(candidateOption);
+          console.log(candidateTemplate)
         });
       }
-      return electionInstance.voters(App.account);
+      return hotelInstance.users(App.account);
     }).then(function(hasVoted) {
-      // Do not allow a user to vote
-      if(hasVoted) {
-        $('form').hide();
-      }
+      
+       
+      
       loader.hide();
       content.show();
     }).catch(function(error) {
@@ -107,18 +118,37 @@ App = {
     });
   },
 
-  castVote: function() {
-    var candidateId = $('#candidatesSelect').val();
-    App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
+  review: function() {
+    var hotelId = $('#hotelSelect').val();
+    
+
+
+   /* var e = document.getElementById ("hotelSelect");
+var hotelId = e.options [e.selectedIndex] .value; */
+
+//alert(hotelId);
+
+    var rating = $('input[name=rating]:checked').val();
+
+    //alert(rating);
+    
+    App.contracts.HotelReview.deployed().then(function(instance) {
+    
+      var res =  instance.review(hotelId,rating, { from: App.account });
+      //alert("333"+res);
+      return res;
     }).then(function(result) {
+    
+    //alert("444"+result);
       // Wait for votes to update
       $("#content").hide();
       $("#loader").show();
     }).catch(function(err) {
+      console.log('error')
       console.error(err);
     });
   }
+
 };
 
 $(function() {
